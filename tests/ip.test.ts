@@ -107,6 +107,10 @@ describe("getBlockedRange: IPv6", () => {
 		"::127.0.0.1",
 		"100::1",
 		"2001:db8::1",
+		"3fff::1",
+		"3fff:0fff:ffff::1",
+		"64:ff9b:1::1",
+		"64:ff9b:1:ffff::808:808",
 	])("blocks %s", (text) => {
 		expect(blocked(text)).toBeDefined();
 	});
@@ -131,6 +135,8 @@ describe("getBlockedRange: IPv6", () => {
 		"2001:4860:4860::8888",
 		"2606:4700:4700::1111",
 		"2002:808:808::1",
+		"3fff:1000::1",
+		"64:ff9b::808:808",
 	])("allows public %s", (text) => {
 		expect(blocked(text)).toBeUndefined();
 	});

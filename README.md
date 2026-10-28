@@ -1,8 +1,28 @@
 # @yedoma-labs/tanur-ssrf
 
-SSRF-safe `fetch` for Node.js. Zero runtime dependencies, Node.js 20+.
+<picture>
+  <source media="(max-width: 640px)" srcset="https://raw.githubusercontent.com/yedoma-labs/assets/main/resized/banner-resized-mobile.png">
+  <img src="https://raw.githubusercontent.com/yedoma-labs/assets/main/resized/banner-resized.png" alt="Project Header">
+</picture>
+
+[![CI](https://github.com/yedoma-labs/tanur-ssrf/actions/workflows/ci.yml/badge.svg)](https://github.com/yedoma-labs/tanur-ssrf/actions/workflows/ci.yml)
+[![npm version](https://img.shields.io/npm/v/@yedoma-labs/tanur-ssrf.svg)](https://www.npmjs.com/package/@yedoma-labs/tanur-ssrf)
+[![TypeScript](https://img.shields.io/badge/TypeScript-7-blue.svg)](https://www.typescriptlang.org/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
+> **tanur** (*tanur*) — Yakutian (Sakha) for "(noch zu bestätigen)"
+
+SSRF-safe `fetch` for Node.js: pins the DNS result, validates every resolved IP and every redirect hop. Zero dependencies.
 
 Use it when your server fetches a URL that a user controls: webhooks, image URLs, link previews, import-by-URL.
+
+```
+pnpm add @yedoma-labs/tanur-ssrf
+```
+
+Supports ESM (`import`) and CommonJS (`require`). Requires Node.js 20+.
+
+---
 
 ## The problem
 
@@ -15,7 +35,7 @@ Blocklists and hostname regexes do not stop server-side request forgery (SSRF):
 
 `createSafeFetch` closes these gaps by design. It resolves a hostname once, checks every returned address, connects to exactly that address, and validates each redirect hop from scratch.
 
-## Quickstart
+## Quick start
 
 ```ts
 import { createSafeFetch, readBodyWithLimit, SafeFetchError } from "@yedoma-labs/tanur-ssrf";
@@ -84,7 +104,7 @@ Caller-provided `AbortSignal` aborts are not converted. The original `AbortError
 - **Every redirect is validated.** `Location` is resolved against the current URL. Protocol, credentials, port, hostname, DNS and IP checks run again for each hop. Redirects are never followed automatically.
 - **Credentials are not forwarded across origins.** On a cross-origin redirect, `Authorization`, `Cookie` and `Proxy-Authorization` are dropped, as `fetch` does.
 - **No socket reuse.** Each request uses a fresh connection, so a connection validated under one policy cannot serve another.
-- **IP classification covers:** IPv4 `0/8`, `10/8`, `100.64/10`, `127/8`, `169.254/16`, `172.16/12`, `192.0.0/24`, `192.168/16`, `198.18/15`, `224/4`, `240/4`, `255.255.255.255`, and documentation ranges. IPv6 `::`, `::1`, `fc00::/7`, `fe80::/10`, `ff00::/8`, plus IPv4-mapped, IPv4-translated, NAT64, 6to4 and Teredo forms, each judged by the embedded IPv4 address where applicable.
+- **IP classification covers:** IPv4 `0/8`, `10/8`, `100.64/10`, `127/8`, `169.254/16`, `172.16/12`, `192.0.0/24`, `192.168/16`, `198.18/15`, `224/4`, `240/4`, `255.255.255.255`, and documentation ranges. IPv6 `::`, `::1`, `fc00::/7`, `fe80::/10`, `ff00::/8`, plus IPv4-mapped, IPv4-translated, NAT64, 6to4 and Teredo forms, each judged by the embedded IPv4 address where applicable. The NAT64 local-use prefix `64:ff9b:1::/48` (RFC 8215) and the documentation prefix `3fff::/20` (RFC 9637) are blocked as well.
 - **Parser normalization.** Hostnames are lowercased, a single trailing dot is removed, and IPv6 brackets are handled. Non-canonical IPv4 forms are normalized by the WHATWG URL parser before the check.
 - **Zero runtime dependencies.** Only `node:*` built-ins are used.
 
@@ -101,14 +121,6 @@ Caller-provided `AbortSignal` aborts are not converted. The original `AbortError
 ### Do not use `allowPrivateNetworks` for untrusted input
 
 `allowPrivateNetworks: true` disables the private, loopback, link-local and reserved address checks. Any URL can then reach internal services, including cloud metadata endpoints. Use it only in tests, or for destinations you know and trust. Keep the default `false` for anything derived from user input.
-
-## Installation
-
-```sh
-pnpm add @yedoma-labs/tanur-ssrf
-```
-
-Supports ESM (`import`) and CommonJS (`require`).
 
 ## Development
 

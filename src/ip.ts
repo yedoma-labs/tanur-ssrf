@@ -210,6 +210,10 @@ function classifyIpv6(bytes: Uint8Array): string | undefined {
 	if (zeroBetween(bytes, 0, 8) && bytesEqual(bytes.subarray(8, 12), [0xff, 0xff, 0x00, 0x00])) {
 		return "IPv4-translated (::ffff:0:0:0/96)";
 	}
+	// NAT64 local-use prefix 64:ff9b:1::/48 (RFC 8215) is private-use and never routed publicly.
+	if (bytesEqual(bytes, [0x00, 0x64, 0xff, 0x9b, 0x00, 0x01])) {
+		return "NAT64 local-use (64:ff9b:1::/48)";
+	}
 	// NAT64 well-known prefix 64:ff9b::/96.
 	if (bytesEqual(bytes, [0x00, 0x64, 0xff, 0x9b]) && zeroBetween(bytes, 4, 12)) {
 		return classifyEmbeddedIpv4(bytes, 12, "NAT64 (64:ff9b::/96)");
@@ -227,6 +231,10 @@ function classifyIpv6(bytes: Uint8Array): string | undefined {
 	}
 	if (bytesEqual(bytes, [0x20, 0x01, 0x0d, 0xb8])) {
 		return "documentation (2001:db8::/32)";
+	}
+	// Documentation prefix 3fff::/20 (RFC 9637): the first 20 bits are 0x3fff0.
+	if (bytesEqual(bytes, [0x3f, 0xff]) && (byteAt(bytes, 2) & 0xf0) === 0) {
+		return "documentation (3fff::/20)";
 	}
 	const first = byteAt(bytes, 0);
 	const second = byteAt(bytes, 1);
