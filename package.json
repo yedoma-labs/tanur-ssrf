@@ -1,6 +1,6 @@
 {
 	"name": "@yedoma-labs/tanur-ssrf",
-	"version": "1.0.0",
+	"version": "1.0.1",
 	"description": "SSRF-safe fetch for Node.js: pins the DNS result, validates every resolved IP and every redirect hop. Zero dependencies.",
 	"type": "module",
 	"main": "./dist/index.cjs",

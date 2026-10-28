@@ -1,3 +1,10 @@
+## [1.0.1](https://github.com/yedoma-labs/tanur-ssrf/compare/v1.0.0...v1.0.1) (2026-10-28)
+
+
+### Bug Fixes
+
+* block NAT64 local-use and documentation IPv6 prefixes ([64798d4](https://github.com/yedoma-labs/tanur-ssrf/commit/64798d4c30855500bca7c80cae82c105354585e1))
+
 # 1.0.0 (2026-10-28)
 
 
