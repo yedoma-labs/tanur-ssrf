@@ -10,8 +10,6 @@
 [![TypeScript](https://img.shields.io/badge/TypeScript-7-blue.svg)](https://www.typescriptlang.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-> **tanur** (*tanur*) — Yakutian (Sakha) for "(noch zu bestätigen)"
-
 SSRF-safe `fetch` for Node.js: pins the DNS result, validates every resolved IP and every redirect hop. Zero dependencies.
 
 Use it when your server fetches a URL that a user controls: webhooks, image URLs, link previews, import-by-URL.
